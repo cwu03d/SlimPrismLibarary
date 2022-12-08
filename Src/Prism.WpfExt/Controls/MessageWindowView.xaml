@@ -1,0 +1,124 @@
+﻿<Window x:Class="Prism.WpfExt.Controls.MessageWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Style="{StaticResource PopupStyle}"
+        Topmost="True"
+        Height="400" Width="700">
+
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,4" />
+        </Style>
+
+        <Style x:Key="YesNoPanelStyle" TargetType="Grid">
+            <Setter Property="Visibility" Value="Hidden" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ConfirmationRequired}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"  />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="OKPanelStyle" TargetType="Grid">
+            <Setter Property="Visibility" Value="Visible" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ConfirmationRequired}" Value="True">
+                    <Setter Property="Visibility" Value="Hidden"  />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ContentPanelStyle" TargetType="Grid">
+            <Setter Property="Visibility" Value="Visible" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding VisualContent}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Hidden"  />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="TextPanelStyle" TargetType="Grid">
+            <Setter Property="Visibility" Value="Visible" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Line1Text}" Value="{x:Null}" />
+                        <Condition Binding="{Binding Line2Text}" Value="{x:Null}" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Visibility" Value="Hidden"  />
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+
+    <Grid Background="Transparent">
+        <Grid Margin="0,10" Background="White" />
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="64" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="88" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" CornerRadius="8,8,0,0" BorderBrush="Transparent"
+                    Style="{StaticResource HeaderStyle}" >
+                <TextBlock Style="{StaticResource HeaderTextStyle}"  HorizontalAlignment="Left" Margin="33,0"
+                           TextWrapping="Wrap" Text="{Binding Title}" />
+            </Border>
+
+            <Grid Grid.Row="1" Style="{StaticResource TextPanelStyle}" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="{Binding Line1Text}" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,0,0,8" />
+                <TextBlock Grid.Row="1" Text="{Binding Line2Text}" TextWrapping="Wrap" VerticalAlignment="Top" />
+            </Grid>
+
+            <Grid Grid.Row="1" Style="{StaticResource ContentPanelStyle}">
+                <ContentControl Content="{Binding VisualContent}" Margin="10"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Grid>
+
+            <Border Grid.Row="2" Background="{StaticResource LightGrayFillBrush1}" 
+                            BorderBrush="Transparent" CornerRadius="0,0,8,8" />
+            <Grid Grid.Row="2" Margin="16,10,16,20" Style="{StaticResource YesNoPanelStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Height="58"
+                         Click="Cancel_Clicked" >
+                    <TextBlock Text="{Binding CancelText}" />
+                </Button>
+
+                <Button Grid.Column="1" Height="58"
+                        Click="Ok_Clicked" >
+                    <TextBlock Text="{Binding OkText}" />
+                </Button>
+
+            </Grid>
+            
+            <Grid Grid.Row="2" Style="{StaticResource OKPanelStyle}"  Margin="16,10,16,20" >
+                <Button HorizontalAlignment="Center" Height="58"
+                        Click="Close_Clicked" >
+                    <TextBlock Text="{Binding CloseText}" />
+                </Button>
+            </Grid>
+
+        </Grid>
+    </Grid>
+    
+</Window>
